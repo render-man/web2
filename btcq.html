@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký thành viên</title>
+    <style>
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input,
+        button {
+            margin-top: 5px;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+
+        .result {
+            margin-left: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            width: 150px;
+            /* chiều rộng cố định cho label */
+        }
+
+        .form-group input,
+        .form-group select {
+            flex: 1;
+            /* input tự co giãn phần còn lại */
+        }
+    </style>
+</head>
+
+<body>
+    <h2>ĐĂNG KÝ THÀNH VIÊN</h2>
+    <form id="registerForm">
+        <label>
+            Họ và tên:
+            <input type="text" id="fullName">
+            <span class="error" id="nameError"></span>
+        </label>
+
+        <label>
+            Mật khẩu:
+            <input type="password" id="password">
+        </label>
+
+        <label>
+            Khẳng định mật khẩu:
+            <input type="password" id="confirmPassword">
+            <span class="error" id="passwordError"></span>
+        </label>
+
+        <label>
+            Ngày tháng năm sinh:
+            <input type="date" id="dob">
+        </label>
+
+        <label>
+            Số điện thoại:
+            <input type="text" id="phone">
+            <span class="error" id="phoneError"></span>
+        </label>
+
+        <label>
+            Đường dẫn ảnh:
+            <input type="file" id="imagePath" accept="image/*">
+            <span class="error" id="imageError"></span>
+        </label>
+
+        <button type="submit">Đăng ký</button>
+        <button type="reset">Hủy bỏ</button>
+    </form>
+
+    <hr>
+
+    <h2>Bài toán chia hết</h2>
+    <label>
+        Nhập vào số x:
+        <input type="number" id="inputNumber">
+        <span class="result" id="mathResult"></span>
+    </label>
+    <div class="form-group">
+        <label for="fullName">Họ và tên:</label>
+        <input type="text" id="fullName">
+    </div>
+
+    <div class="form-group">
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password">
+    </div>
+    <script>
+        const form = document.getElementById("registerForm");
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            let isValid = true;
+
+            const name = document.getElementById("fullName").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const phone = document.getElementById("phone").value;
+            const file = document.getElementById("imagePath").value;
+
+            // Reset errors
+            document.getElementById("nameError").innerText = "";
+            document.getElementById("passwordError").innerText = "";
+            document.getElementById("phoneError").innerText = "";
+            document.getElementById("imageError").innerText = "";
+
+            // Kiểm tra họ tên không chứa số
+            if (/\d/.test(name)) {
+                document.getElementById("nameError").innerText = "Họ tên không được chứa số";
+                isValid = false;
+            }
+
+            // Kiểm tra mật khẩu đủ mạnh
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                document.getElementById("passwordError").innerText = "Mật khẩu phải có chữ hoa, thường, ký tự đặc biệt và ≥ 8 ký tự";
+                isValid = false;
+            }
+
+            // Mật khẩu phải khớp
+            if (password !== confirmPassword) {
+                document.getElementById("passwordError").innerText = "Mật khẩu xác nhận không khớp";
+                isValid = false;
+            }
+
+            // Số điện thoại không chứa ký tự đặc biệt (trừ -)
+            if (/[^0-9\-]/.test(phone)) {
+                document.getElementById("phoneError").innerText = "Số điện thoại không hợp lệ";
+                isValid = false;
+            }
+
+            // Kiểm tra file upload là ảnh
+            if (!file.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                document.getElementById("imageError").innerText = "Vui lòng chọn file ảnh";
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert("Đăng ký thành công!");
+            }
+        });
+
+        // Bài toán chia hết cho 2 và 3
+        document.getElementById("inputNumber").addEventListener("input", function () {
+            const value = parseInt(this.value);
+            const result = document.getElementById("mathResult");
+
+            if (!isNaN(value)) {
+                if (value % 2 === 0 && value % 3 === 0) {
+                    result.textContent = "Chia hết cho cả 2 và 3";
+                } else {
+                    result.textContent = "Không chia hết cho cả 2 và 3";
+                }
+            } else {
+                result.textContent = "";
+            }
+        });
+    </script>
+</body>
+
+</html>
